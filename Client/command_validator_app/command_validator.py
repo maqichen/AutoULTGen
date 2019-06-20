@@ -401,13 +401,14 @@ class MainWindow(QMainWindow):
                             if int(field['bitfield_h'])> 31 and int(field['bitfield_l']) <= 31:
                                 split_field_idx = field_idx
                                 break
-                        if split_field_idx > 0:
+                        if split_field_idx >= 0:
                             dword['fields'][split_field_idx]['bitfield_h'] = '31'
                             dword['fields'] = dword['fields'][:split_field_idx + 1]
                             dword['fields'][split_field_idx]['have_following'] = 'Y'
                             next_dword['fields'][split_field_idx]['bitfield_l'] = '32'
                             next_dword['fields'] = next_dword['fields'][split_field_idx:]
                             next_dword['fields'][0]['have_precursor'] = 'Y'
+                            print('have_precursor')
                             for field in next_dword['fields']:
                                 field['bitfield_l'] = str(int(field['bitfield_l']) - 32)
                                 field['bitfield_h'] = str(int(field['bitfield_h']) - 32)
@@ -453,6 +454,8 @@ class MainWindow(QMainWindow):
                         if 'CHECK' in field and field['CHECK'] == 'Y':
                             s_field = '          <' + field['field_name']
                             for key, value in field.items():
+                                if key == 'have_precursor':
+                                    print('have_precursor')
                                 if key != 'field_name':
                                     s_field = s_field + ' ' + key + '="' + str(value) + '"'
                             s_field = s_field + '/>\n'
